@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import WebApp from "@twa-dev/sdk";
 
 const API_URL = "https://spill-golang.onrender.com"; // ← CHANGE TO YOUR DEPLOYED GO BACKEND
 
@@ -11,7 +10,10 @@ export default function Onboarding() {
   const [picked, setPicked] = useState(false);
 
   useEffect(() => {
-    const initData = WebApp.initData;
+    if (typeof window === "undefined") return;
+
+    import("@twa-dev/sdk").then(({ default: WebApp }) => {
+      const initData = WebApp.initData;
 
     // Step 1: Login + get nickname suggestions
     fetch(`${API_URL}/auth/telegram`, {
@@ -29,9 +31,13 @@ export default function Onboarding() {
         }
         setLoading(false);
       });
+    });
   }, []);
 
   const pickNickname = async (nick: string) => {
+    if (typeof window === "undefined") return;
+
+    const { default: WebApp } = await import("@twa-dev/sdk");
     setPicked(true);
     WebApp.HapticFeedback.impactOccurred("heavy");
 

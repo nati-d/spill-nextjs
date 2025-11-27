@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import WebApp from "@twa-dev/sdk";
 
 export default function WebAppProvider({
   children,
@@ -10,10 +9,12 @@ export default function WebAppProvider({
 }) {
   useEffect(() => {
     if (typeof window !== "undefined") {
-      WebApp.ready();
-      WebApp.expand();
-      WebApp.setHeaderColor("#000000");
-      WebApp.setBackgroundColor("#000000");
+      import("@twa-dev/sdk").then(({ default: WebApp }) => {
+        WebApp.ready();
+        WebApp.expand();
+        WebApp.setHeaderColor("#000000");
+        WebApp.setBackgroundColor("#000000");
+      });
     }
   }, []);
 
