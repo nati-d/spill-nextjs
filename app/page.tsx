@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const API_URL = "https://spill-golang.onrender.com"; // ← CHANGE TO YOUR DEPLOYED GO BACKEND
+const API_URL = "https://spill-fastapi.onrender.com"; // ← CHANGE TO YOUR DEPLOYED GO BACKEND
 
 export default function Onboarding() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
