@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-const API_URL = "https://spill-fastapi.onrender.com"; // ← CHANGE TO YOUR DEPLOYED GO BACKEND
+const API_URL = "https://spill-fastapi.onrender.com";
 
 export default function Onboarding() {
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -17,14 +17,19 @@ export default function Onboarding() {
         const initData = WebApp.initData;
 
         // Step 1: Login + get nickname suggestions
+        // FIX: Send initData as raw form data, not wrapped in URLSearchParams
+        const formData = new FormData();
+        formData.append("init_data", initData);
+
         fetch(`${API_URL}/auth/telegram`, {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body: new URLSearchParams({ init_data: initData }),
+          body: formData, // FormData automatically sets correct Content-Type
         })
           .then(r => {
             if (!r.ok) {
-              throw new Error(`HTTP error! status: ${r.status}`);
+              return r.text().then(text => {
+                throw new Error(`HTTP error! status: ${r.status}, body: ${text}`);
+              });
             }
             return r.json();
           })
@@ -59,20 +64,34 @@ export default function Onboarding() {
     setPicked(true);
     WebApp.HapticFeedback.impactOccurred("heavy");
 
+    // FIX: Use correct header name (backend accepts both cases, but this is correct)
     await fetch(`${API_URL}/nickname/reserve`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "X-Telegram-InitData": WebApp.initData,
+        "X-Telegram-InitData": WebApp.initData, // Backend now accepts this case
       },
       body: JSON.stringify({ nickname: nick }),
-    });
-
-    // Success animation
-    WebApp.HapticFeedback.notificationOccurred("success");
-    setTimeout(() => {
-      WebApp.close(); // or redirect to feed later
-    }, 800);
+    })
+      .then(r => {
+        if (!r.ok) {
+          return r.text().then(text => {
+            throw new Error(`HTTP error! status: ${r.status}, body: ${text}`);
+          });
+        }
+        return r.json();
+      })
+      .then(() => {
+        // Success animation
+        WebApp.HapticFeedback.notificationOccurred("success");
+        setTimeout(() => {
+          WebApp.close(); // or redirect to feed later
+        }, 800);
+      })
+      .catch(error => {
+        console.error("Error reserving nickname:", error);
+        setPicked(false); // Allow retry on error
+      });
   };
 
   if (loading) {
