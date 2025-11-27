@@ -12,26 +12,44 @@ export default function Onboarding() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    import("@twa-dev/sdk").then(({ default: WebApp }) => {
-      const initData = WebApp.initData;
+    import("@twa-dev/sdk")
+      .then(({ default: WebApp }) => {
+        const initData = WebApp.initData;
 
-    // Step 1: Login + get nickname suggestions
-    fetch(`${API_URL}/auth/telegram`, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ init_data: initData }),
-    })
-      .then(r => r.json())
-      .then(data => {
-        if (data.nickname_suggestions) {
-          setSuggestions(data.nickname_suggestions);
-        } else {
-          // User already has nickname → skip onboarding
-          WebApp.close();
-        }
+        // Step 1: Login + get nickname suggestions
+        fetch(`${API_URL}/auth/telegram`, {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: new URLSearchParams({ init_data: initData }),
+        })
+          .then(r => {
+            if (!r.ok) {
+              throw new Error(`HTTP error! status: ${r.status}`);
+            }
+            return r.json();
+          })
+          .then(data => {
+            if (data.nickname_suggestions) {
+              setSuggestions(data.nickname_suggestions);
+            } else {
+              // User already has nickname → skip onboarding
+              WebApp.close();
+            }
+            setLoading(false);
+          })
+          .catch(error => {
+            console.error("Error fetching nickname suggestions:", error);
+            // Fallback: show some default suggestions or error message
+            setSuggestions(["Anonymous", "Mystery", "Shadow"]);
+            setLoading(false);
+          });
+      })
+      .catch(error => {
+        console.error("Error loading WebApp SDK:", error);
+        // Fallback if SDK fails to load
+        setSuggestions(["Anonymous", "Mystery", "Shadow"]);
         setLoading(false);
       });
-    });
   }, []);
 
   const pickNickname = async (nick: string) => {
