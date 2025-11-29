@@ -60,7 +60,7 @@ function IconContainer({
   return (
     <a href={href} className="transition-transform duration-200 hover:scale-110">
       <div className={cn(
-        "relative flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800 transition-colors",
+        "relative flex h-12 w-12 items-center justify-center rounded-full  dark:bg-neutral-800 transition-colors",
         isActive && "border-2 border-primary"
       )}>
         <div className="flex h-6 w-6 items-center justify-center">
