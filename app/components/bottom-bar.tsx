@@ -5,7 +5,7 @@ import { BOTTOM_BAR_LINKS } from "@/constants";
 export function BottomBar() {
   
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center p-1  backdrop-blur-sm">
+    <div className="fixed bottom-0 left-0 right-0 z-50 flex items-center justify-center p-1 bg-white  backdrop-blur-sm">
       <FloatingDock
         items={BOTTOM_BAR_LINKS}
       />
