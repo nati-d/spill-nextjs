@@ -19,7 +19,7 @@ export default function RootLayout({
       <body className="h-screen flex flex-col overflow-hidden">
         <WebAppProvider>
           <Navbar />
-          <main className="flex-1 overflow-y-auto pt-16 pb-24">{children}</main>
+          <main className="flex-1 overflow-y-auto pt-16 pb-28">{children}</main>
           <BottomBar />
         </WebAppProvider>
       </body>

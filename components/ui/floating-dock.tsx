@@ -27,7 +27,7 @@ const FloatingDockDesktop = ({
   return (
     <div
       className={cn(
-        "w-full flex h-16 items-center justify-between gap-4 px-4 rounded-2xl bg-gray-50  dark:bg-neutral-900",
+        "w-full flex items-center justify-between gap-4 px-4 py-3 rounded-2xl bg-primary/10 dark:bg-neutral-900",
         className,
       )}
     >
@@ -58,15 +58,21 @@ function IconContainer({
   const displayIcon = isActive && iconFilled ? iconFilled : icon;
 
   return (
-    <a href={href} className="transition-transform duration-200 hover:scale-110">
+    <a href={href} className="flex flex-col items-center gap-1 transition-transform duration-200 hover:scale-105">
       <div className={cn(
-        "relative flex h-12 w-12 items-center justify-center rounded-full  dark:bg-neutral-800 transition-colors",
-        isActive && "border-2 border-primary"
+        "relative flex text-black dark:text-white items-center justify-center transition-colors",
+        !isActive && "rounded-full dark:bg-neutral-800"
       )}>
-        <div className="flex h-6 w-6 items-center justify-center">
+        <div className="flex text-black dark:text-white h-7 w-7 items-center justify-center">
           {displayIcon}
         </div>
       </div>
+      <span className={cn(
+        "text-xs font-medium transition-colors",
+        isActive ? "text-primary" : "text-black dark:text-white"
+      )}>
+        {title}
+      </span>
     </a>
   );
 }

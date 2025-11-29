@@ -10,25 +10,25 @@ import {
 export const BOTTOM_BAR_LINKS: BottomBarLink[] = [
         {
           title: "Confessions",
-          icon: React.createElement(ScrollText, { strokeWidth: 2, className: "h-full w-full text-neutral-500 dark:text-neutral-300" }),
+          icon: React.createElement(ScrollText, { strokeWidth: 2, className: "h-full w-full text-black dark:text-white:text-neutral-300" }),
           iconFilled: React.createElement(ScrollText, { strokeWidth: 2, fill: "currentColor", className: "h-full w-full text-primary" }),
           href: "/",
         },
         {
           title: "Post",
-          icon: React.createElement(Plus, { strokeWidth: 2, className: "h-full w-full text-neutral-500 dark:text-neutral-300" }),
+          icon: React.createElement(Plus, { strokeWidth: 2, className: "h-full w-full texr-black dark:text-white:text-neutral-300" }),
           iconFilled: React.createElement(Plus, { strokeWidth: 2.5, fill: "currentColor", className: "h-full w-full text-primary" }),
           href: "/post",
         },
         {
-          title: "Match",
-          icon: React.createElement(Heart, { strokeWidth: 2, className: "h-full w-full text-neutral-500 dark:text-neutral-300" }),
+          title: "Discover",
+          icon: React.createElement(Heart, { strokeWidth: 2, className: "h-full w-full text-black dark:text-white:text-neutral-300" }),
           iconFilled: React.createElement(Heart, { strokeWidth: 2, fill: "currentColor", className: "h-full w-full text-primary" }),
           href: "/discover",
         },
         {
           title: "Profile",
-          icon: React.createElement(UserRound, { strokeWidth: 2, className: "h-full w-full text-neutral-500 dark:text-neutral-300" }),
+          icon: React.createElement(UserRound, { strokeWidth: 2, className: "h-full w-full text-black dark:text-white:text-neutral-300" }),
           iconFilled: React.createElement(UserRound, { strokeWidth: 2, fill: "currentColor", className: "h-full w-full text-primary" }),
           href: "/profile",
         }
