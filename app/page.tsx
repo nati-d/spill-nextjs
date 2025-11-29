@@ -105,6 +105,8 @@ export default function Onboarding() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-gray-900 text-white">
+      {/*Print initData*/}
+      <pre className="text-xs text-gray-400">{JSON.stringify(user, null, 2)}</pre>
       {/* User Avatar + Name */}
       <div className="mb-8 text-center">
         {user.photo_url ? (
