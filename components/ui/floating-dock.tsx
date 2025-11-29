@@ -45,7 +45,7 @@ function IconContainer({
   href: string;
 }) {
   return (
-    <a href={href}>
+    <a href={href} className="transition-transform duration-200 hover:scale-110">
       <div className="relative flex h-12 w-12 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800">
         <div className="flex h-6 w-6 items-center justify-center">
           {icon}
