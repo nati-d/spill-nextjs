@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import WebApp from "@twa-dev/sdk";
 
 interface TelegramUser {
   id: number;
@@ -20,46 +19,56 @@ export default function Onboarding() {
   useEffect(() => {
     if (typeof window === "undefined") return;
 
-    // Ensure WebApp is ready
-    WebApp.ready();
+    import("@twa-dev/sdk")
+      .then(({ default: WebApp }) => {
+        // Ensure WebApp is ready
+        WebApp.ready();
 
-    // Expand main button and enable closing
-    WebApp.expand();
+        // Expand main button and enable closing
+        WebApp.expand();
 
-    const tgUser = WebApp.initDataUnsafe.user;
-    
-    if (!tgUser) {
-      console.error("No user data available. Are you opening this in Telegram?");
-      setLoading(false);
-      return;
-    }
+        const tgUser = WebApp.initDataUnsafe.user;
+        
+        if (!tgUser) {
+          console.error("No user data available. Are you opening this in Telegram?");
+          setLoading(false);
+          return;
+        }
 
-    setUser(tgUser as TelegramUser);
+        setUser(tgUser as TelegramUser);
 
-    // Generate fun nickname suggestions based on user's name/username
-    const base = tgUser.username
-      ? tgUser.username.replace(/^@/, "")
-      : tgUser.first_name.toLowerCase().replace(/\s+/g, "");
+        // Generate fun nickname suggestions based on user's name/username
+        const base = tgUser.username
+          ? tgUser.username.replace(/^@/, "")
+          : tgUser.first_name.toLowerCase().replace(/\s+/g, "");
 
-    const prefixes = ["ghost", "shadow", "ninja", "phantom", "mystery", "void", "echo", "cipher", "nova", "zen"];
-    const suffixes = ["spill", "whisper", "confess", "soul", "vibe", "wave", "drift", "hush", "fox", "raven"];
+        const prefixes = ["ghost", "shadow", "ninja", "phantom", "mystery", "void", "echo", "cipher", "nova", "zen"];
+        const suffixes = ["spill", "whisper", "confess", "soul", "vibe", "wave", "drift", "hush", "fox", "raven"];
 
-    const generated = [
-      base + Math.floor(Math.random() * 999),
-      prefixes[Math.floor(Math.random() * prefixes.length)] + base,
-      base + suffixes[Math.floor(Math.random() * suffixes.length)],
-      "anonymous" + tgUser.id.toString().slice(-4),
-      tgUser.first_name + "TheSilent",
-      "Secret" + (tgUser.last_name || tgUser.first_name),
-    ];
+        const generated = [
+          base + Math.floor(Math.random() * 999),
+          prefixes[Math.floor(Math.random() * prefixes.length)] + base,
+          base + suffixes[Math.floor(Math.random() * suffixes.length)],
+          "anonymous" + tgUser.id.toString().slice(-4),
+          tgUser.first_name + "TheSilent",
+          "Secret" + (tgUser.last_name || tgUser.first_name),
+        ];
 
-    // Dedupe and shuffle
-    const unique = Array.from(new Set(generated)).slice(0, 5);
-    setSuggestions(unique);
-    setLoading(false);
+        // Dedupe and shuffle
+        const unique = Array.from(new Set(generated)).slice(0, 5);
+        setSuggestions(unique);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error loading WebApp SDK:", error);
+        setLoading(false);
+      });
   }, []);
 
-  const pickNickname = (nick: string) => {
+  const pickNickname = async (nick: string) => {
+    if (typeof window === "undefined") return;
+
+    const { default: WebApp } = await import("@twa-dev/sdk");
     setPicked(true);
     WebApp.HapticFeedback.impactOccurred("heavy");
 
