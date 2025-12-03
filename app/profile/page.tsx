@@ -2,9 +2,25 @@
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useUser } from '@/hooks/useUser';
 import Image from 'next/image';
+import { Link as LinkIcon, Instagram, Twitter, Facebook } from 'lucide-react';
 
 const ProfilePage = () => {
     const { user, photoUrl, loading, error } = useUser();
+    
+    // Dummy values for fields if backend doesn't return data
+    const displayAge = user?.age ?? 25;
+    const displayGender = user?.gender ?? 'Not specified';
+    const displayBio = user?.bio ?? null;
+    const displayInterests = user?.interests && user.interests.length > 0 
+        ? user.interests 
+        : ['Music', 'Travel', 'Photography', 'Food'];
+    // Use cover.png as fallback for photos if photo_urls is empty (duplicate 4 times)
+    const displayPhotoUrls = user?.photo_urls && user.photo_urls.length > 0
+        ? user.photo_urls
+        : ['/images/cover.png', '/images/cover.png', '/images/cover.png', '/images/cover.png'];
+    const displaySocialLinks = user?.social_links && Object.keys(user.social_links).length > 0
+        ? user.social_links
+        : { instagram: 'https://instagram.com', twitter: 'https://twitter.com' };
     
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
@@ -36,9 +52,90 @@ const ProfilePage = () => {
                 </div>
                 
                 {/* User Info */}
-                <div className="mt-4 flex flex-col items-center space-y-1">
+                <div className="mt-4 flex flex-col items-center space-y-1 w-full">
                     <h1 className="text-2xl font-bold">{user.nickname || user.username || user.first_name}</h1>
                     <p className="text-sm text-gray-500">{user.first_name} {user.last_name}</p>
+                    
+                    {/* Age and Gender */}
+                    <div className="flex items-center gap-3 mt-2 text-sm text-gray-600 dark:text-gray-400">
+                        <span>{displayAge} years old</span>
+                        <span>•</span>
+                        <span className="capitalize">{displayGender}</span>
+                    </div>
+                </div>
+                
+                {/* Bio Section */}
+                {displayBio && (
+                    <div className="mt-6 w-full">
+                        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                            <h2 className="text-lg font-semibold mb-2">About</h2>
+                            <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                                {displayBio}
+                            </p>
+                        </div>
+                    </div>
+                )}
+                
+                {/* Interests Section */}
+                <div className="mt-4 w-full">
+                    <h2 className="text-lg font-semibold mb-3">Interests</h2>
+                    <div className="flex flex-wrap gap-2">
+                        {displayInterests.map((interest, index) => (
+                            <span 
+                                key={index}
+                                className="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium"
+                            >
+                                {interest}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+                
+                {/* Photos Section */}
+                <div className="mt-6 w-full">
+                    <h2 className="text-lg font-semibold mb-3">Photos</h2>
+                    <div className="grid grid-cols-3 gap-2">
+                        {displayPhotoUrls.map((url, index) => (
+                            <div key={index} className="aspect-square rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700">
+                                <Image
+                                    src={url}
+                                    alt={`Photo ${index + 1}`}
+                                    width={150}
+                                    height={150}
+                                    className="w-full h-full object-cover"
+                                />
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                
+                {/* Social Links Section */}
+                <div className="mt-6 w-full">
+                    <h2 className="text-lg font-semibold mb-3">Social Links</h2>
+                    <div className="space-y-2">
+                        {Object.entries(displaySocialLinks).map(([platform, link]) => {
+                            const getIcon = () => {
+                                const platformLower = platform.toLowerCase();
+                                if (platformLower.includes('instagram')) return <Instagram className="h-5 w-5" />;
+                                if (platformLower.includes('twitter')) return <Twitter className="h-5 w-5" />;
+                                if (platformLower.includes('facebook')) return <Facebook className="h-5 w-5" />;
+                                return <LinkIcon className="h-5 w-5" />;
+                            };
+                            
+                            return (
+                                <a
+                                    key={platform}
+                                    href={link as string}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                >
+                                    {getIcon()}
+                                    <span className="capitalize font-medium">{platform}</span>
+                                </a>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </div>
