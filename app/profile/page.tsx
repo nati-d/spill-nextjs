@@ -2,12 +2,14 @@
 import { UserAvatar } from '@/components/ui/user-avatar';
 import { useUser } from '@/hooks/useUser';
 import Image from 'next/image';
-import { Link as LinkIcon, Instagram, Twitter, Facebook, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Link as LinkIcon, Instagram, Twitter, Facebook, X, ChevronLeft, ChevronRight, Edit } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const ProfilePage = () => {
     const { user, photoUrl, loading, error } = useUser();
     const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number | null>(null);
+    const router = useRouter();
     
     // Dummy values for fields if backend doesn't return data
     const displayAge = user?.age ?? 25;
@@ -225,6 +227,17 @@ const ProfilePage = () => {
                             );
                         })}
                     </div>
+                </div>
+                
+                {/* Update Profile Button */}
+                <div className="mt-8 w-full mb-4">
+                    <button
+                        onClick={() => router.push('/profile/edit')}
+                        className="w-full px-6 py-3 bg-primary text-white rounded-lg font-medium hover:opacity-90 transition-opacity flex items-center justify-center gap-2"
+                    >
+                        <Edit className="h-4 w-4" />
+                        Update Profile
+                    </button>
                 </div>
             </div>
         </div>
