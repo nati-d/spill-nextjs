@@ -11,8 +11,8 @@ const ProfilePage = () => {
     
     // Dummy values for fields if backend doesn't return data
     const displayAge = user?.age ?? 25;
-    const displayGender = user?.gender ?? 'Not specified';
-    const displayBio = user?.bio ?? null;
+    const displayGender = user?.gender ?? 'male';
+    const displayBio = user?.bio ?? `Hi! I'm ${user?.nickname || user?.username || user?.first_name || 'a user'} and I love exploring new experiences. Passionate about connecting with others and sharing life's moments. Always up for an adventure!`;
     const displayInterests = user?.interests && user.interests.length > 0 
         ? user.interests 
         : ['Music', 'Travel', 'Photography', 'Food'];
@@ -85,16 +85,14 @@ const ProfilePage = () => {
                 </div>
                 
                 {/* Bio Section */}
-                {displayBio && (
-                    <div className="mt-6 w-full">
-                        <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
-                            <h2 className="text-lg font-semibold mb-2">About</h2>
-                            <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
-                                {displayBio}
-                            </p>
-                        </div>
+                <div className="mt-6 w-full">
+                    <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+                        <h2 className="text-lg font-semibold mb-2">About</h2>
+                        <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed">
+                            {displayBio}
+                        </p>
                     </div>
-                )}
+                </div>
                 
                 {/* Interests Section */}
                 <div className="mt-4 w-full">
