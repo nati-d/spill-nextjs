@@ -21,3 +21,5 @@ export interface User {
     created_at: string;
     updated_at: string;
   }
+
+  export type { UserUpdateSchema as UserUpdate } from '@/schemas/user';

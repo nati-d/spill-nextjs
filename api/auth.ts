@@ -1,4 +1,7 @@
+import { UserUpdate } from "@/types/user";
 import api from "./client";
+
+
 
 export const loginUser = async() => {
     try {
@@ -21,6 +24,25 @@ export const loginUser = async() => {
             console.error("No response received:", error.request);
         } else {
             console.error("Error setting up request:", error.message);
+        }
+        throw error;
+    }
+}
+
+export const updateUser = async (userData: UserUpdate) => {
+    try {
+        const response = await api.patch("auth/me", userData);
+        if (!response.data) {
+            throw new Error("No data in response");
+        }
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            console.error("Update User Error:", {
+                status: error.response.status,
+                statusText: error.response.statusText,
+                data: error.response.data,
+            });
         }
         throw error;
     }
