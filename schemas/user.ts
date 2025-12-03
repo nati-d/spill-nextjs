@@ -2,6 +2,8 @@ import { z } from 'zod';
 import { GENDER_OPTIONS } from '@/constants/gender';
 
 export const userUpdateSchema = z.object({
+  first_name: z.string().min(1).optional(),
+  last_name: z.string().nullable().optional(),
   age: z.number().int().min(1).max(120).nullable().optional(),
   gender: z.enum(GENDER_OPTIONS).nullable().optional(),
   bio: z.string().nullable().optional(),
