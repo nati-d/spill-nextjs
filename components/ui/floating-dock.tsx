@@ -27,7 +27,7 @@ const FloatingDockDesktop = ({
   return (
     <div
       className={cn(
-        "w-full flex items-center justify-between gap-4 px-4 py-3 rounded-2xl bg-primary/10 dark:bg-neutral-900",
+        "w-full flex items-center justify-between gap-4 px-4 py-3 rounded-4xl bg-primary/10 dark:bg-neutral-900",
         className,
       )}
     >

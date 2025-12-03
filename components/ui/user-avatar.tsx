@@ -1,12 +1,10 @@
 'use client';
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { User } from "@/types/user";
 
 interface UserAvatarProps {
-  user?: {
-    telegram_username?: string;
-    telegram_id?: number;
-  } | null;
+    user?: User;
   photoUrl?: string | null;
   size?: number;
   className?: string;
@@ -21,8 +19,8 @@ export function UserAvatar({
   showBorder = false 
 }: UserAvatarProps) {
   const getInitials = () => {
-    if (!user?.telegram_username) return "?";
-    const username = user.telegram_username || "";
+    if (!user?.username) return "?";
+    const username = user.username || "";
     return username.charAt(0).toUpperCase() || "?";
   };
 

@@ -1,15 +1,9 @@
 import { useState, useEffect } from "react";
 import { loginUser } from "@/api/auth";
 import { getTelegramPhotoUrl } from "@/utils/telegram";
+import { User } from "@/types/user";
 
-interface User {
-  id: number;
-  telegram_id: number;
-  telegram_username: string;
-  nickname: string | null;
-  created_at: string;
-  updated_at: string;
-}
+
 
 interface UseUserReturn {
   user: User | null;
