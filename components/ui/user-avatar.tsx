@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { User } from "@/types/user";
 
 interface UserAvatarProps {
-    user?: User;
+  user?: User;
   photoUrl?: string | null;
   size?: number;
   className?: string;

@@ -15,7 +15,7 @@ export default function Navbar() {
                 ) : (
                     <div className="cursor-pointer">
                         <UserAvatar 
-                            user={user} 
+                            user={user || undefined} 
                             photoUrl={photoUrl}
                             size={32}
                             showBorder
