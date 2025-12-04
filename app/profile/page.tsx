@@ -115,21 +115,42 @@ const ProfilePage = () => {
                 <div className="mt-6 w-full">
                     <h2 className="text-lg font-semibold mb-3">Photos</h2>
                     <div className="grid grid-cols-3 gap-2">
-                        {displayPhotoUrls.map((url, index) => (
-                            <div 
-                                key={index} 
-                                className="aspect-square rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
-                                onClick={() => setSelectedPhotoIndex(index)}
-                            >
-                                <Image
-                                    src={url}
-                                    alt={`Photo ${index + 1}`}
-                                    width={150}
-                                    height={150}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                        ))}
+                        {displayPhotoUrls.map((url, index) => {
+                            const isExternalUrl = url.startsWith('http://') || url.startsWith('https://');
+                            
+                            return (
+                                <div 
+                                    key={index} 
+                                    className="aspect-square rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-700 cursor-pointer hover:opacity-80 transition-opacity"
+                                    onClick={() => setSelectedPhotoIndex(index)}
+                                >
+                                    {isExternalUrl ? (
+                                        <img
+                                            src={url}
+                                            alt={`Photo ${index + 1}`}
+                                            className="w-full h-full object-cover"
+                                            onError={(e) => {
+                                                // Fallback to placeholder on error
+                                                const target = e.target as HTMLImageElement;
+                                                target.src = '/images/cover.png';
+                                            }}
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <Image
+                                            src={url}
+                                            alt={`Photo ${index + 1}`}
+                                            width={150}
+                                            height={150}
+                                            className="w-full h-full object-cover"
+                                            onError={() => {
+                                                // Error handled by Next.js Image
+                                            }}
+                                        />
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
                 
@@ -181,14 +202,31 @@ const ProfilePage = () => {
                             className="relative max-w-[90vw] max-h-[90vh] mx-auto"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <Image
-                                src={displayPhotoUrls[selectedPhotoIndex]}
-                                alt={`Photo ${selectedPhotoIndex + 1}`}
-                                width={1200}
-                                height={1200}
-                                className="max-w-full max-h-[90vh] object-contain rounded-lg"
-                                priority
-                            />
+                            {(() => {
+                                const url = displayPhotoUrls[selectedPhotoIndex];
+                                const isExternalUrl = url.startsWith('http://') || url.startsWith('https://');
+                                
+                                return isExternalUrl ? (
+                                    <img
+                                        src={url}
+                                        alt={`Photo ${selectedPhotoIndex + 1}`}
+                                        className="max-w-full max-h-[90vh] object-contain rounded-lg"
+                                        onError={(e) => {
+                                            const target = e.target as HTMLImageElement;
+                                            target.src = '/images/cover.png';
+                                        }}
+                                    />
+                                ) : (
+                                    <Image
+                                        src={url}
+                                        alt={`Photo ${selectedPhotoIndex + 1}`}
+                                        width={1200}
+                                        height={1200}
+                                        className="max-w-full max-h-[90vh] object-contain rounded-lg"
+                                        priority
+                                    />
+                                );
+                            })()}
                             
                             {/* Photo Counter */}
                             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm">
